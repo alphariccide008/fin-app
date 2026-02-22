@@ -147,6 +147,7 @@ export default function Dashboard() {
     }
   };
 
+  const fullName  = user?.name?.toUpperCase() ?? '';
   const lastName  = user?.name?.split(' ').slice(-1)[0]?.toUpperCase() ?? '';
   const recent    = transactions.slice(0, 10);
   const pending   = transactions.filter(t => t.status === 'pending' && t.type === 'debit');
@@ -187,7 +188,7 @@ export default function Dashboard() {
             M&amp;T Checking — {user?.accountNumber}
           </p>
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,.7)', margin: '2px 0 0' }}>
-            Dear, <strong style={{ color: LEMON }}>{lastName}</strong>
+            Dear, <strong style={{ color: LEMON }}>{fullName}</strong>
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto', flexWrap: 'wrap' }}>

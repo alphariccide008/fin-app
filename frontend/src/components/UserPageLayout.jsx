@@ -24,7 +24,7 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
   const { count: msgCount } = useUnreadMessages();
   const navigate  = useNavigate();
   const location  = useLocation();
-  const firstName = user?.name?.split(' ')[0] ?? '';
+  const firstName = user?.name ?? '';
 
   const handleLogout = () => { logout(); navigate('/login'); };
 
