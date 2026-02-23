@@ -1,21 +1,9 @@
-const express = require('express');
-const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const { query, initSchema } = require('./utils/db');
+const app = require('./app');
 
-const app = express();
 const PORT = process.env.PORT || 4000;
-
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: '20mb' })); // allow base64 ID images
-
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/transactions', require('./routes/transactions'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/messages', require('./routes/messages'));
-
-app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 const seedAdmin = async () => {
   const existing = await query("SELECT id FROM users WHERE role = 'admin' LIMIT 1");
