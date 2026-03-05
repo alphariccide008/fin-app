@@ -168,10 +168,10 @@ export default function Transactions() {
 
   return (
     <UserPageLayout>
-      <div style={{ flex: 1, padding: '32px 28px', background: '#F0F2F5', overflowY: 'auto' }}>
+      <div style={{ flex: 1, padding: '24px 28px', background: '#F0F2F5', overflowY: 'auto', overflowX: 'hidden', width: '100%', boxSizing: 'border-box' }}>
 
         {/* Page title */}
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 16 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: GREEN, margin: '0 0 4px' }}>Transaction History</h1>
           <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>View and search all your account activity. Click any row for details.</p>
         </div>

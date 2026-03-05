@@ -84,8 +84,8 @@ export default function Profile() {
 
   return (
     <UserPageLayout>
-      <div style={{ flex: 1, background: '#F0F2F5', overflowY: 'auto' }}>
-        <div style={{ maxWidth: 860, margin: '0 auto', padding: '28px 20px' }}>
+      <div style={{ flex: 1, background: '#F0F2F5', overflowY: 'auto', overflowX: 'hidden', width: '100%' }}>
+        <div style={{ maxWidth: 860, margin: '0 auto', padding: '22px 20px', width: '100%', boxSizing: 'border-box' }}>
 
           {/* Page header */}
           <div style={{ marginBottom: 24 }}>

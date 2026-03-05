@@ -160,8 +160,8 @@ export default function Dashboard() {
   ];
 
   const AccountInfo = () => (
-    <div style={{ padding: '20px 24px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div style={{ padding: '16px 20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
         {[
           { label: 'Account Holder', value: user?.name },
           { label: 'Account Number', value: user?.accountNumber },
@@ -182,7 +182,7 @@ export default function Dashboard() {
   return (
     <UserPageLayout>
       {/* ── Account header bar ── */}
-      <div className="dash-account-header" style={{ background: GREEN_MID, padding: '12px 28px', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', flexShrink: 0 }}>
+      <div className="dash-account-header" style={{ background: GREEN_MID, padding: '10px 28px', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap', flexShrink: 0, width: '100%' }}>
         <div>
           <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 }}>
             M&amp;T Checking — {user?.accountNumber}
@@ -213,10 +213,10 @@ export default function Dashboard() {
       </div>
 
       {/* ── Three-column main content ── */}
-      <div className="dash-main" style={{ maxWidth: 1280, margin: '0 auto', padding: '22px 28px', display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+      <div className="dash-main" style={{ width: '100%', maxWidth: 1400, margin: '0 auto', padding: '18px 28px', display: 'flex', gap: 18, alignItems: 'flex-start', flexWrap: 'wrap', boxSizing: 'border-box' }}>
 
         {/* ── LEFT: Balance cards + Activity ── */}
-        <div style={{ flex: '1 1 560px', minWidth: 0 }}>
+        <div style={{ flex: '1 1 520px', minWidth: 0, width: '100%' }}>
 
           {/* Balance error */}
           {balError && (
@@ -357,7 +357,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── RIGHT: Promo + Shortcuts ── */}
-        <div className="dash-right" style={{ flex: '0 0 270px', minWidth: 240, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="dash-right" style={{ flex: '0 0 260px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
 
           {/* Promo banner */}
           <div style={{ overflow: 'hidden' }}>

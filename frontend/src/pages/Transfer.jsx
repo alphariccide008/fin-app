@@ -124,15 +124,15 @@ export default function Transfer() {
 
   return (
     <UserPageLayout>
-      <div className="transfer-page-pad" style={{ flex: 1, padding: '32px 28px', background: '#F0F2F5', overflowY: 'auto' }}>
+      <div className="transfer-page-pad" style={{ flex: 1, padding: '24px 20px', background: '#F0F2F5', overflowY: 'auto', overflowX: 'hidden', width: '100%', boxSizing: 'border-box' }}>
 
         {/* Page title */}
-        <div style={{ maxWidth: 560, margin: '0 auto 20px' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto 16px', width: '100%' }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: GREEN, margin: '0 0 4px' }}>Payments &amp; Transfers</h1>
           <p style={{ fontSize: 13, color: '#64748b', margin: 0 }}>Send money securely within M&amp;T Bank or to an external account.</p>
         </div>
 
-        <div style={{ maxWidth: 560, margin: '0 auto' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto', width: '100%' }}>
 
           {/* Balance card */}
           <div style={{ background: '#fff', borderRadius: 8, padding: '18px 22px', border: `1px solid ${BORDER}`, marginBottom: 20, boxShadow: '0 1px 4px rgba(0,0,0,.05)' }}>
