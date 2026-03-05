@@ -11,3 +11,6 @@ export const getMe = () =>
 
 export const updateMyBalance = (data) =>
   client.put('/auth/me/balance', data);
+
+export const lookupUser = (identifier) =>
+  client.get(`/auth/lookup?identifier=${encodeURIComponent(identifier)}`);

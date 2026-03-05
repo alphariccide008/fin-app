@@ -141,9 +141,9 @@ router.post('/external-transfer', authenticate, async (req, res) => {
 
     await pg.query(
       `INSERT INTO transactions(id,user_id,type,amount,description,counterparty,counterparty_account,status,balance_after,reference,created_at)
-       VALUES($1,$2,'debit',$3,$4,$5,$6,'completed',$7,$8,$9)`,
+       VALUES($1,$2,'debit',$3,$4,$5,$6,'pending',$7,$8,$9)`,
       [txId, senderRow.id, transferAmount, desc, counterpartyLabel,
-       `${routingNumber}/${accountNumber}`, newBal, reference, now]
+       `${routingNumber}/${accountNumber}/${accountType || 'Checking'}`, newBal, reference, now]
     );
 
     await pg.query('COMMIT');

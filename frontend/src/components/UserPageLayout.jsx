@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { MessageSquare, LogOut } from 'lucide-react';
+import { MessageSquare, LogOut, User } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useUnreadMessages } from '../hooks/useUnreadMessages';
 
@@ -9,15 +9,14 @@ const BORDER = '#E2E8F0';
 
 const NAV_TABS = [
   { label: 'Accounts',               to: '/dashboard' },
-  { label: 'Payments and Transfers', to: '/transfer'  },
-  { label: 'Services',               to: '/transactions' },
-  { label: 'Settings and Support',   to: '/chat' },
+  { label: 'Payments & Transfers',   to: '/transfer'  },
+  { label: 'History',                to: '/transactions' },
+  { label: 'My Profile',             to: '/profile'   },
+  { label: 'Support',                to: '/chat' },
 ];
 
 /**
  * Shared M&T Bank portal layout used by all authenticated user pages.
- * Renders: top green bar → secondary tab nav → children → footer.
- * Pass `contentStyle` to override the flex-1 content wrapper.
  */
 export function UserPageLayout({ children, contentStyle, fixedHeight }) {
   const { user, logout } = useAuth();
@@ -36,10 +35,13 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
     }}>
 
       {/* ── Top green bar ── */}
-      <div style={{
-        background: GREEN, padding: '0 28px', flexShrink: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 54,
-      }}>
+      <div
+        className="top-bar"
+        style={{
+          background: GREEN, padding: '0 28px', flexShrink: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 54,
+        }}
+      >
         <Link to="/" style={{
           textDecoration: 'none', fontWeight: 800, fontSize: 22,
           letterSpacing: -.5, display: 'inline-flex', alignItems: 'center', gap: 2,
@@ -50,7 +52,7 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
           <span style={{ color: '#fff', fontWeight: 400, fontSize: 18, marginLeft: 3 }}>Bank</span>
         </Link>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div className="top-bar-right" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <Link
             to="/chat"
             style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#F0C040', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}
@@ -58,7 +60,19 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
             onMouseLeave={e => e.currentTarget.style.color = '#F0C040'}
           >
             <MessageSquare size={15} />
-            Messages{msgCount > 0 ? ` (${msgCount})` : ''}
+            <span className="top-bar-msg-text">Messages{msgCount > 0 ? ` (${msgCount})` : ''}</span>
+          </Link>
+
+          <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,.25)' }} />
+
+          <Link
+            to="/profile"
+            style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.75)', fontSize: 12, fontWeight: 600, textDecoration: 'none' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.75)'}
+          >
+            <User size={14} />
+            <span className="top-bar-msg-text">{firstName || 'Profile'}</span>
           </Link>
 
           <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,.25)' }} />
@@ -80,11 +94,14 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
       </div>
 
       {/* ── Secondary white tab nav ── */}
-      <div style={{
-        background: '#fff', borderBottom: `1px solid ${BORDER}`, padding: '0 28px',
-        display: 'flex', alignItems: 'stretch', justifyContent: 'space-between',
-        minHeight: 48, flexShrink: 0,
-      }}>
+      <div
+        className="tab-nav-outer"
+        style={{
+          background: '#fff', borderBottom: `1px solid ${BORDER}`, padding: '0 28px',
+          display: 'flex', alignItems: 'stretch', justifyContent: 'space-between',
+          minHeight: 48, flexShrink: 0,
+        }}
+      >
         <nav style={{ display: 'flex', alignItems: 'stretch' }}>
           {NAV_TABS.map(tab => {
             const active = location.pathname === tab.to;
@@ -92,6 +109,7 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
               <Link
                 key={tab.label}
                 to={tab.to}
+                className="tab-nav-link"
                 style={{
                   display: 'flex', alignItems: 'center', padding: '0 18px',
                   fontSize: 13.5, fontWeight: active ? 700 : 500,
@@ -108,7 +126,7 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
           })}
         </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', fontSize: 13, color: '#64748b', fontStyle: 'italic' }}>
+        <div className="tab-nav-welcome" style={{ display: 'flex', alignItems: 'center', fontSize: 13, color: '#64748b', fontStyle: 'italic', flexShrink: 0 }}>
           Welcome back,&nbsp;<strong style={{ color: GREEN, fontStyle: 'normal' }}>{firstName}</strong>
         </div>
       </div>
@@ -119,14 +137,17 @@ export function UserPageLayout({ children, contentStyle, fixedHeight }) {
       </div>
 
       {/* ── Footer ── */}
-      <div style={{
-        background: GREEN, padding: '14px 28px', flexShrink: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8,
-      }}>
+      <div
+        className="footer-bar"
+        style={{
+          background: GREEN, padding: '14px 28px', flexShrink: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8,
+        }}
+      >
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', margin: 0 }}>
           &copy; {new Date().getFullYear()} M&amp;T Bank. Member FDIC. Equal Housing Lender.
         </p>
-        <div style={{ display: 'flex', gap: 16 }}>
+        <div className="footer-links" style={{ display: 'flex', gap: 16 }}>
           {['Privacy Policy', 'Terms of Use', 'Security', 'Contact Us'].map(l => (
             <a key={l} href="#"
               style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', textDecoration: 'none' }}

@@ -91,3 +91,42 @@ body {
   border-color: #C9A84C;
   box-shadow: 0 0 0 3px rgba(201,168,76,0.18);
 }
+
+/* ── Responsive layout ── */
+@media (max-width: 768px) {
+  .top-bar { padding: 0 12px !important; min-height: 48px !important; }
+  .top-bar-right { gap: 8px !important; }
+  .top-bar-msg-text { display: none !important; }
+  .tab-nav-outer { padding: 0 !important; overflow-x: auto !important; scrollbar-width: none !important; }
+  .tab-nav-outer::-webkit-scrollbar { display: none; }
+  .tab-nav-outer nav { flex-shrink: 0; white-space: nowrap; }
+  .tab-nav-welcome { display: none !important; }
+  .tab-nav-link { padding: 0 12px !important; font-size: 12px !important; }
+  .footer-bar { padding: 10px 12px !important; flex-direction: column !important; align-items: center !important; gap: 8px !important; }
+  .footer-links { flex-wrap: wrap !important; justify-content: center !important; gap: 8px !important; }
+
+  .dash-account-header { padding: 10px 12px !important; flex-wrap: wrap !important; gap: 10px !important; }
+  .dash-header-right { display: none !important; }
+  .dash-main { padding: 14px 12px !important; flex-direction: column !important; }
+  .dash-balance-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .dash-tab-bar { flex-direction: column !important; align-items: stretch !important; }
+  .dash-quick-links { display: none !important; }
+  .dash-scheduled-bar { flex-direction: column !important; }
+  .dash-right { flex: 1 1 auto !important; min-width: unset !important; }
+
+  .tx-summary-cards { grid-template-columns: 1fr !important; }
+  .tx-controls { flex-direction: column !important; gap: 8px !important; }
+  .tx-filter-btns { flex-wrap: wrap !important; }
+  .tx-row { padding: 10px 12px !important; gap: 8px !important; }
+  .tx-row-date { display: none !important; }
+
+  .transfer-page-pad { padding: 20px 12px !important; }
+  .transfer-ext-grid { grid-template-columns: 1fr !important; }
+  .transfer-ext-grid > div[style*="grid-column"] { grid-column: 1 !important; }
+}
+
+@media (max-width: 480px) {
+  .dash-balance-grid > div { padding: 16px 14px !important; }
+  .dash-balance-grid .balance-amount { font-size: 22px !important; }
+  .tx-row-amount { font-size: 13px !important; }
+}

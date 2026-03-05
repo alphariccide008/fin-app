@@ -182,7 +182,7 @@ export default function Dashboard() {
   return (
     <UserPageLayout>
       {/* ── Account header bar ── */}
-      <div style={{ background: GREEN_MID, padding: '12px 28px', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', flexShrink: 0 }}>
+      <div className="dash-account-header" style={{ background: GREEN_MID, padding: '12px 28px', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', flexShrink: 0 }}>
         <div>
           <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 }}>
             M&amp;T Checking — {user?.accountNumber}
@@ -191,7 +191,7 @@ export default function Dashboard() {
             Dear, <strong style={{ color: LEMON }}>{fullName}</strong>
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto', flexWrap: 'wrap' }}>
+        <div className="dash-header-right" style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto', flexWrap: 'wrap' }}>
           <span style={{ fontSize: 13, color: 'rgba(255,255,255,.7)' }}>View Account</span>
           <div style={{ display: 'flex', alignItems: 'stretch', border: '1px solid rgba(255,255,255,.3)', overflow: 'hidden' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px', background: 'rgba(255,255,255,.08)', fontSize: 13, color: '#fff', minWidth: 230 }}>
@@ -213,7 +213,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── Three-column main content ── */}
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '22px 28px', display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+      <div className="dash-main" style={{ maxWidth: 1280, margin: '0 auto', padding: '22px 28px', display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
 
         {/* ── LEFT: Balance cards + Activity ── */}
         <div style={{ flex: '1 1 560px', minWidth: 0 }}>
@@ -227,7 +227,7 @@ export default function Dashboard() {
           )}
 
           {/* Balance cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
+          <div className="dash-balance-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
 
             {/* Total Balance */}
             <div style={{ background: `linear-gradient(145deg, ${CARD_BG}, ${CARD_MID})`, padding: '20px 22px', position: 'relative', overflow: 'hidden' }}>
@@ -247,7 +247,7 @@ export default function Dashboard() {
                   <Pencil size={10} /> Edit
                 </button>
               </div>
-              <p style={{ fontSize: 28, fontWeight: 800, color: '#fff', margin: 0, letterSpacing: -.5 }}>
+              <p className="balance-amount" style={{ fontSize: 28, fontWeight: 800, color: '#fff', margin: 0, letterSpacing: -.5 }}>
                 {fmt(user?.ledgerBalance ?? user?.availableBalance)}
               </p>
             </div>
@@ -270,7 +270,7 @@ export default function Dashboard() {
                   <Pencil size={10} /> Edit
                 </button>
               </div>
-              <p style={{ fontSize: 28, fontWeight: 800, color: LEMON, margin: 0, letterSpacing: -.5 }}>
+              <p className="balance-amount" style={{ fontSize: 28, fontWeight: 800, color: LEMON, margin: 0, letterSpacing: -.5 }}>
                 {fmt(user?.availableBalance)}
               </p>
             </div>
@@ -280,7 +280,7 @@ export default function Dashboard() {
           <div style={{ background: '#fff', border: `1px solid ${BORDER}` }}>
 
             {/* Tab bar + quick links */}
-            <div style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between', borderBottom: `2px solid ${BORDER}`, flexWrap: 'wrap' }}>
+            <div className="dash-tab-bar" style={{ display: 'flex', alignItems: 'stretch', justifyContent: 'space-between', borderBottom: `2px solid ${BORDER}`, flexWrap: 'wrap' }}>
               <div style={{ display: 'flex' }}>
                 {TABS.map(tab => (
                   <button
@@ -298,7 +298,7 @@ export default function Dashboard() {
                   </button>
                 ))}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', padding: '0 4px' }}>
+              <div className="dash-quick-links" style={{ display: 'flex', alignItems: 'center', padding: '0 4px' }}>
                 {[
                   { label: 'Place a Stop Payment', to: '/chat',     icon: Ban },
                   { label: 'Schedule a Transfer',  to: '/transfer', icon: CalendarClock },
@@ -316,7 +316,7 @@ export default function Dashboard() {
             </div>
 
             {/* Scheduled info bar */}
-            <div style={{ display: 'flex', background: '#F8FAFC', borderBottom: `1px solid ${BORDER}`, flexWrap: 'wrap' }}>
+            <div className="dash-scheduled-bar" style={{ display: 'flex', background: '#F8FAFC', borderBottom: `1px solid ${BORDER}`, flexWrap: 'wrap' }}>
               <a href="#" style={{ flex: 1, padding: '8px 16px', fontSize: 12.5, color: GREEN_LT, textDecoration: 'none', fontWeight: 500, borderRight: `1px solid ${BORDER}`, whiteSpace: 'nowrap' }}
                 onMouseEnter={e => e.target.style.color = GREEN} onMouseLeave={e => e.target.style.color = GREEN_LT}
               >View Scheduled Transfers ({fmt(scheduled)})</a>
@@ -357,7 +357,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── RIGHT: Promo + Shortcuts ── */}
-        <div style={{ flex: '0 0 270px', minWidth: 240, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="dash-right" style={{ flex: '0 0 270px', minWidth: 240, display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* Promo banner */}
           <div style={{ overflow: 'hidden' }}>

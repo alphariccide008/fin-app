@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
   LayoutDashboard, ArrowLeftRight, History, LogOut,
-  Users, ShieldCheck, Menu, X, Building2, MessageSquare
+  Users, ShieldCheck, Menu, X, Building2, MessageSquare, UserCircle
 } from 'lucide-react';
 import { useState } from 'react';
 import { useUnreadMessages } from '../hooks/useUnreadMessages';
@@ -106,6 +106,7 @@ export const Sidebar = () => {
             <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" onClick={() => setMobileOpen(false)} />
             <NavItem to="/transfer" icon={ArrowLeftRight} label="Transfer" onClick={() => setMobileOpen(false)} />
             <NavItem to="/transactions" icon={History} label="History" onClick={() => setMobileOpen(false)} />
+            <NavItem to="/profile" icon={UserCircle} label="My Profile" onClick={() => setMobileOpen(false)} />
             <NavItem to="/chat" icon={MessageSquare} label="Support" onClick={() => setMobileOpen(false)} badge={msgCount} />
           </>
         )}

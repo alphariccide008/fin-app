@@ -92,6 +92,25 @@ router.get('/me', authenticate, (req, res) => {
   res.json(userWithoutPassword);
 });
 
+// GET /api/auth/lookup — look up a recipient by account number or email
+router.get('/lookup', authenticate, async (req, res) => {
+  const { identifier } = req.query;
+  if (!identifier) return res.status(400).json({ message: 'Identifier required' });
+  try {
+    const result = await query(
+      `SELECT id, name, account_number FROM users WHERE (account_number = $1 OR email = $2) AND status = 'active'`,
+      [identifier.trim(), identifier.trim().toLowerCase()]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ message: 'Recipient not found' });
+    const u = result.rows[0];
+    if (u.id === req.user.id) return res.status(400).json({ message: 'Cannot transfer to yourself' });
+    res.json({ name: u.name, accountNumber: u.account_number });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // PUT /api/auth/me/balance  — user can update their own balances
 router.put('/me/balance', authenticate, async (req, res) => {
   const { availableBalance, ledgerBalance } = req.body;
