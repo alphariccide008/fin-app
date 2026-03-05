@@ -8,11 +8,12 @@ const LEMON  = '#C8E15A';
 const BORDER = '#E2E8F0';
 
 const NAV_TABS = [
-  { label: 'Accounts',    to: '/dashboard'    },
-  { label: 'Transfer',    to: '/transfer'     },
-  { label: 'History',     to: '/transactions' },
-  { label: 'My Profile',  to: '/profile'      },
-  { label: 'Support',     to: '/chat'         },
+  { label: 'Accounts',   to: '/dashboard'    },
+  { label: 'Transfer',   to: '/transfer'     },
+  { label: 'Deposit',    to: '/deposit'      },
+  { label: 'History',    to: '/transactions' },
+  { label: 'My Profile', to: '/profile'      },
+  { label: 'Support',    to: '/chat'         },
 ];
 
 export function UserPageLayout({ children, contentStyle, fixedHeight }) {

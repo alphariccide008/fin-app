@@ -8,3 +8,6 @@ export const transfer = (data) =>
 
 export const externalTransfer = (data) =>
   client.post('/transactions/external-transfer', data);
+
+export const mobileDeposit = (data) =>
+  client.post('/transactions/mobile-deposit', data);

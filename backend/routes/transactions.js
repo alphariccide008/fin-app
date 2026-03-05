@@ -162,4 +162,38 @@ router.post('/external-transfer', authenticate, async (req, res) => {
   }
 });
 
+// POST /api/transactions/mobile-deposit
+router.post('/mobile-deposit', authenticate, async (req, res) => {
+  try {
+    const { amount, description } = req.body;
+    const depositAmount = parseFloat(amount);
+
+    if (!depositAmount || depositAmount <= 0) {
+      return res.status(400).json({ message: 'Valid deposit amount is required' });
+    }
+
+    const userRes = await query('SELECT available_balance FROM users WHERE id = $1', [req.user.id]);
+    if (userRes.rows.length === 0) return res.status(404).json({ message: 'User not found' });
+
+    const now = new Date().toISOString();
+    const reference = `DEP-${Date.now()}`;
+    const txId = uuidv4();
+    const desc = description?.trim() || 'Mobile Check Deposit';
+
+    await query(
+      `INSERT INTO transactions(id,user_id,type,amount,description,counterparty,counterparty_account,status,balance_after,reference,created_at)
+       VALUES($1,$2,'credit',$3,$4,'Mobile Deposit','DEP','pending',$5,$6,$7)`,
+      [txId, req.user.id, depositAmount, desc, parseFloat(userRes.rows[0].available_balance), reference, now]
+    );
+
+    res.status(201).json({
+      message: 'Mobile deposit submitted. Pending admin approval.',
+      transaction: { id: txId, amount: depositAmount, description: desc, reference, status: 'pending', createdAt: now },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

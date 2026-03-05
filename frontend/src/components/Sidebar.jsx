@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
   LayoutDashboard, ArrowLeftRight, History, LogOut,
-  Users, ShieldCheck, Menu, X, Building2, MessageSquare, UserCircle
+  Users, ShieldCheck, Menu, X, Building2, MessageSquare, UserCircle, Smartphone
 } from 'lucide-react';
 import { useState } from 'react';
 import { useUnreadMessages } from '../hooks/useUnreadMessages';
@@ -99,6 +99,7 @@ export const Sidebar = () => {
             <NavItem to="/admin/users" icon={Users} label="Users" onClick={() => setMobileOpen(false)} />
             <NavItem to="/admin/transactions" icon={History} label="Transactions" onClick={() => setMobileOpen(false)} />
             <NavItem to="/admin/messages" icon={MessageSquare} label="Messages" onClick={() => setMobileOpen(false)} badge={msgCount} />
+            <NavItem to="/admin/deposits" icon={Smartphone} label="Deposits" onClick={() => setMobileOpen(false)} />
           </>
         ) : (
           <>

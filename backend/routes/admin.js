@@ -1,6 +1,6 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
-const { query, mapUser, mapTx } = require('../utils/db');
+const { query, getClient, mapUser, mapTx } = require('../utils/db');
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
@@ -204,6 +204,62 @@ router.delete('/transactions/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET /api/admin/deposits — pending mobile deposits
+router.get('/deposits', async (req, res) => {
+  try {
+    const result = await query(`
+      SELECT t.*, u.name AS user_name, u.email AS user_email, u.account_number AS user_account
+      FROM transactions t
+      LEFT JOIN users u ON t.user_id = u.id
+      WHERE t.reference LIKE 'DEP-%' AND t.status = 'pending'
+      ORDER BY t.created_at DESC
+    `);
+    res.json(result.rows.map(mapTx));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// PUT /api/admin/deposits/:id/approve — approve a pending mobile deposit
+router.put('/deposits/:id/approve', async (req, res) => {
+  const pg = await getClient();
+  try {
+    await pg.query('BEGIN');
+
+    const txRes = await pg.query(
+      `SELECT * FROM transactions WHERE id = $1 AND reference LIKE 'DEP-%' AND status = 'pending' FOR UPDATE`,
+      [req.params.id]
+    );
+    if (txRes.rows.length === 0) {
+      await pg.query('ROLLBACK');
+      return res.status(404).json({ message: 'Pending deposit not found' });
+    }
+    const tx = txRes.rows[0];
+
+    const userRes = await pg.query(
+      `UPDATE users SET available_balance = available_balance + $1, ledger_balance = ledger_balance + $1
+       WHERE id = $2 RETURNING available_balance`,
+      [parseFloat(tx.amount), tx.user_id]
+    );
+    const newBalance = parseFloat(userRes.rows[0].available_balance);
+
+    await pg.query(
+      `UPDATE transactions SET status = 'completed', balance_after = $1 WHERE id = $2`,
+      [newBalance, tx.id]
+    );
+
+    await pg.query('COMMIT');
+    res.json({ message: 'Deposit approved and posted to account' });
+  } catch (err) {
+    await pg.query('ROLLBACK');
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  } finally {
+    pg.release();
   }
 });
 

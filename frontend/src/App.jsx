@@ -13,11 +13,13 @@ import Commercial from './pages/Commercial';
 import Wealth from './pages/Wealth';
 import Chat from './pages/Chat';
 import Profile from './pages/Profile';
+import MobileDeposit from './pages/MobileDeposit';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminUserDetail from './pages/admin/AdminUserDetail';
 import AdminTransactions from './pages/admin/AdminTransactions';
 import AdminMessages from './pages/admin/AdminMessages';
+import AdminDeposits from './pages/admin/AdminDeposits';
 
 export default function App() {
   return (
@@ -39,6 +41,7 @@ export default function App() {
           <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/deposit" element={<ProtectedRoute><MobileDeposit /></ProtectedRoute>} />
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
@@ -46,6 +49,7 @@ export default function App() {
           <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetail /></AdminRoute>} />
           <Route path="/admin/transactions" element={<AdminRoute><AdminTransactions /></AdminRoute>} />
           <Route path="/admin/messages" element={<AdminRoute><AdminMessages /></AdminRoute>} />
+          <Route path="/admin/deposits" element={<AdminRoute><AdminDeposits /></AdminRoute>} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />

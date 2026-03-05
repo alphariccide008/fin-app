@@ -9,3 +9,5 @@ export const getAdminTransactions = () => client.get('/admin/transactions');
 export const addAdminTransaction = (data) => client.post('/admin/transactions', data);
 export const deleteTransaction = (id) => client.delete(`/admin/transactions/${id}`);
 export const getAdminStats = () => client.get('/admin/stats');
+export const getPendingDeposits = () => client.get('/admin/deposits');
+export const approveDeposit = (id) => client.put(`/admin/deposits/${id}/approve`);
