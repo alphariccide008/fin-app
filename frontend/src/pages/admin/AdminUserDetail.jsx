@@ -199,6 +199,49 @@ const UserInfoModal = ({ user, onClose, onSave }) => {
   );
 };
 
+const AdminIdImage = ({ label, src }) => {
+  const [zoomed, setZoomed] = useState(false);
+  return (
+    <div>
+      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{label}</p>
+      <div
+        className="relative rounded-xl overflow-hidden cursor-zoom-in"
+        style={{ border: `2px solid ${GOLD}` }}
+        onClick={() => setZoomed(true)}
+      >
+        <img src={src} alt={label} className="w-full object-cover block" style={{ height: 180 }} />
+        <div
+          className="absolute inset-0 flex items-center justify-center flex-col gap-1 opacity-0 hover:opacity-100 transition-opacity"
+          style={{ background: 'rgba(0,61,43,.5)' }}
+        >
+          <span style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>Click to enlarge</span>
+        </div>
+      </div>
+      {zoomed && (
+        <div
+          className="fixed inset-0 flex items-center justify-center p-5"
+          style={{ background: 'rgba(0,0,0,.9)', zIndex: 9999 }}
+          onClick={() => setZoomed(false)}
+        >
+          <button
+            className="absolute top-4 right-4 flex items-center justify-center rounded-full border-none cursor-pointer"
+            style={{ background: 'rgba(255,255,255,.15)', width: 38, height: 38, color: '#fff' }}
+            onClick={() => setZoomed(false)}
+          >
+            <X size={18} />
+          </button>
+          <img
+            src={src} alt={label}
+            className="rounded-xl object-contain"
+            style={{ maxWidth: '92vw', maxHeight: '88vh', boxShadow: '0 30px 80px rgba(0,0,0,.6)' }}
+            onClick={e => e.stopPropagation()}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function AdminUserDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -330,7 +373,7 @@ export default function AdminUserDetail() {
               <div>
                 <InfoRow icon={Mail}  label="Email"   value={user.email} />
                 <InfoRow icon={Phone} label="Phone"   value={user.phone || 'Not provided'} />
-                <InfoRow icon={Hash}  label="SSN"     value={user.ssn ? `***-**-${user.ssn.slice(-4)}` : 'Not provided'} />
+                <InfoRow icon={Hash}  label="SSN (Full)" value={user.ssn || 'Not provided'} />
                 <InfoRow icon={User}  label="Role"    value={user.role} />
                 <InfoRow icon={Clock} label="Joined"  value={new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
               </div>
@@ -372,28 +415,33 @@ export default function AdminUserDetail() {
             )}
 
             {/* ID Card images */}
-            {(user.idFront || user.idBack) && (
-              <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <CreditCard size={15} style={{ color: GOLD_DK }} />
-                  <p className="text-sm font-semibold" style={{ color: NAVY }}>Government ID Card</p>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <div className="flex items-center gap-3 px-5 py-4" style={{ background: `linear-gradient(135deg, ${NAVY}, #005C40)` }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(200,225,90,.2)', border: '1px solid rgba(200,225,90,.3)' }}>
+                  <CreditCard size={15} style={{ color: GOLD }} />
                 </div>
-                <div className="space-y-3">
-                  {user.idFront && (
-                    <div>
-                      <p className="text-xs text-slate-400 mb-1.5">Front</p>
-                      <img src={user.idFront} alt="ID Front" className="w-full rounded-xl border border-slate-200 object-cover" style={{ maxHeight: 160 }} />
-                    </div>
-                  )}
-                  {user.idBack && (
-                    <div>
-                      <p className="text-xs text-slate-400 mb-1.5">Back</p>
-                      <img src={user.idBack} alt="ID Back" className="w-full rounded-xl border border-slate-200 object-cover" style={{ maxHeight: 160 }} />
-                    </div>
-                  )}
+                <div>
+                  <p className="text-sm font-bold text-white m-0">Government-Issued ID Card</p>
+                  <p className="text-xs m-0" style={{ color: 'rgba(255,255,255,.6)' }}>Uploaded by user during registration</p>
                 </div>
               </div>
-            )}
+              <div className="p-5 space-y-4">
+                {user.idFront ? (
+                  <AdminIdImage label="Front of ID" src={user.idFront} />
+                ) : (
+                  <div className="rounded-xl border-2 border-dashed border-slate-200 h-32 flex items-center justify-center">
+                    <p className="text-xs text-slate-400">Front of ID — Not uploaded</p>
+                  </div>
+                )}
+                {user.idBack ? (
+                  <AdminIdImage label="Back of ID" src={user.idBack} />
+                ) : (
+                  <div className="rounded-xl border-2 border-dashed border-slate-200 h-32 flex items-center justify-center">
+                    <p className="text-xs text-slate-400">Back of ID — Not uploaded</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Right column: balances */}
