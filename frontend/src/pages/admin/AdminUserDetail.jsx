@@ -102,10 +102,11 @@ const BalanceModal = ({ user, onClose, onSave }) => {
 
 const UserInfoModal = ({ user, onClose, onSave }) => {
   const [form, setForm] = useState({
-    name:  user.name  || '',
-    email: user.email || '',
-    phone: user.phone || '',
-    role:  user.role  || 'user',
+    name:      user.name      || '',
+    email:     user.email     || '',
+    phone:     user.phone     || '',
+    role:      user.role      || 'user',
+    createdAt: user.createdAt ? new Date(user.createdAt).toISOString().slice(0, 10) : '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
@@ -180,6 +181,15 @@ const UserInfoModal = ({ user, onClose, onSave }) => {
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Membership Date</label>
+            <input
+              type="date"
+              value={form.createdAt}
+              onChange={e => set('createdAt', e.target.value)}
+              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-800 text-sm input-focus"
+            />
           </div>
         </div>
 

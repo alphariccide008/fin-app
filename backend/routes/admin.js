@@ -44,7 +44,7 @@ router.get('/users/:id', async (req, res) => {
 
 // PUT /api/admin/users/:id — update user profile info
 router.put('/users/:id', async (req, res) => {
-  const { name, email, phone, role } = req.body;
+  const { name, email, phone, role, createdAt } = req.body;
   try {
     const check = await query('SELECT id FROM users WHERE id = $1', [req.params.id]);
     if (check.rows.length === 0) return res.status(404).json({ message: 'User not found' });
@@ -67,6 +67,10 @@ router.put('/users/:id', async (req, res) => {
     if (email) { setParts.push(`email=$${idx++}`); vals.push(email.toLowerCase().trim()); }
     if (phone !== undefined) { setParts.push(`phone=$${idx++}`); vals.push(phone.trim()); }
     if (role && ['user', 'admin'].includes(role)) { setParts.push(`role=$${idx++}`); vals.push(role); }
+    if (createdAt) {
+      const d = new Date(createdAt);
+      if (!isNaN(d.getTime())) { setParts.push(`created_at=$${idx++}`); vals.push(d.toISOString()); }
+    }
 
     if (setParts.length === 0) return res.status(400).json({ message: 'Nothing to update' });
     vals.push(req.params.id);
@@ -155,7 +159,7 @@ router.get('/transactions', async (req, res) => {
 // POST /api/admin/transactions — add manual transaction
 router.post('/transactions', async (req, res) => {
   try {
-    const { userId, type, amount, description, counterparty, status, createdAt } = req.body;
+    const { userId, type, amount, description, counterparty, bankTo, status, createdAt } = req.body;
     const txAmount = parseFloat(amount);
 
     if (!userId || !type || !txAmount || txAmount <= 0) {
@@ -182,10 +186,10 @@ router.post('/transactions', async (req, res) => {
     const txDate = createdAt ? new Date(createdAt).toISOString() : new Date().toISOString();
 
     const txResult = await query(
-      `INSERT INTO transactions(id,user_id,type,amount,description,counterparty,counterparty_account,status,balance_after,reference,created_at)
-       VALUES($1,$2,$3,$4,$5,$6,'ADMIN',$7,$8,$9,$10) RETURNING *`,
+      `INSERT INTO transactions(id,user_id,type,amount,description,counterparty,counterparty_account,bank_to,status,balance_after,reference,created_at)
+       VALUES($1,$2,$3,$4,$5,$6,'ADMIN',$7,$8,$9,$10,$11) RETURNING *`,
       [id, userId, type, txAmount, description || (type === 'credit' ? 'Credit (Admin)' : 'Debit (Admin)'),
-       counterparty || 'Admin', status || 'completed', newBalance, reference, txDate]
+       counterparty || 'Admin', bankTo || '', status || 'completed', newBalance, reference, txDate]
     );
 
     res.status(201).json({ message: 'Transaction added', transaction: mapTx(txResult.rows[0]) });

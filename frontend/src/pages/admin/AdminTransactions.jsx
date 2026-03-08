@@ -14,6 +14,7 @@ const AddModal = ({ users, onClose, onSave }) => {
     amount: '',
     description: '',
     counterparty: '',
+    bankTo: '',
     status: 'completed',
     createdAt: new Date().toISOString().slice(0, 16),
   });
@@ -142,6 +143,17 @@ const AddModal = ({ users, onClose, onSave }) => {
               value={form.counterparty}
               onChange={e => setForm(f => ({ ...f, counterparty: e.target.value }))}
               placeholder="e.g. Bank Transfer, Client Name"
+              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-800 text-sm input-focus"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Bank To</label>
+            <input
+              type="text"
+              value={form.bankTo}
+              onChange={e => setForm(f => ({ ...f, bankTo: e.target.value }))}
+              placeholder="e.g. Chase Bank, Wells Fargo"
               className="w-full px-4 py-3 border border-slate-200 rounded-xl text-slate-800 text-sm input-focus"
             />
           </div>

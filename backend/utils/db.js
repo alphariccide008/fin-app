@@ -47,6 +47,7 @@ const initSchema = async () => {
       description TEXT DEFAULT '',
       counterparty TEXT DEFAULT '',
       counterparty_account TEXT DEFAULT '',
+      bank_to TEXT DEFAULT '',
       status TEXT DEFAULT 'completed',
       balance_after NUMERIC(15,2) DEFAULT 0,
       reference TEXT DEFAULT '',
@@ -78,6 +79,7 @@ const initSchema = async () => {
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS id_back TEXT DEFAULT ''`,
     // TRUE default for existing rows so they don't generate false unread notifications
     `ALTER TABLE messages ADD COLUMN IF NOT EXISTS read_by_user BOOLEAN DEFAULT TRUE`,
+    `ALTER TABLE transactions ADD COLUMN IF NOT EXISTS bank_to TEXT DEFAULT ''`,
   ];
   for (const sql of alterations) {
     await pool.query(sql).catch(() => {});
@@ -129,6 +131,7 @@ const mapTx = (row) => ({
   description: row.description,
   counterparty: row.counterparty,
   counterpartyAccount: row.counterparty_account,
+  bankTo: row.bank_to || '',
   status: row.status,
   balanceAfter: parseFloat(row.balance_after),
   reference: row.reference,
