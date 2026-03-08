@@ -105,6 +105,22 @@ const mapUser = (row) => ({
   createdAt: row.created_at,
 });
 
+// Returns user data safe for non-admin clients: SSN masked, ID images omitted
+const maskSSN = (ssn) => {
+  if (!ssn) return '';
+  const digits = ssn.replace(/\D/g, '');
+  if (digits.length >= 4) return `***-**-${digits.slice(-4)}`;
+  return '***-**-****';
+};
+
+const mapUserPublic = (row) => {
+  const u = mapUser(row);
+  u.ssn = maskSSN(u.ssn);
+  u.idFront = '';
+  u.idBack = '';
+  return u;
+};
+
 const mapTx = (row) => ({
   id: row.id,
   userId: row.user_id,
@@ -120,4 +136,4 @@ const mapTx = (row) => ({
   ...(row.user_name !== undefined ? { userName: row.user_name, userEmail: row.user_email } : {}),
 });
 
-module.exports = { query, getClient, initSchema, mapUser, mapTx };
+module.exports = { query, getClient, initSchema, mapUser, mapUserPublic, mapTx };

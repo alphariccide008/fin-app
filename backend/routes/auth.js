@@ -78,7 +78,8 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-    const { password: _, ...userWithoutPassword } = user;
+    const safeUser = user.role === 'admin' ? user : mapUserPublic(result.rows[0]);
+    const { password: _, ...userWithoutPassword } = safeUser;
     res.json({ token, user: userWithoutPassword });
   } catch (err) {
     console.error(err);
@@ -88,7 +89,13 @@ router.post('/login', async (req, res) => {
 
 // GET /api/auth/me
 router.get('/me', authenticate, (req, res) => {
-  const { password: _, ...userWithoutPassword } = req.user;
+  const user = req.user;
+  if (user.role !== 'admin') {
+    user.ssn = user.ssn ? `***-**-${user.ssn.replace(/\D/g, '').slice(-4) || '****'}` : '';
+    user.idFront = '';
+    user.idBack = '';
+  }
+  const { password: _, ...userWithoutPassword } = user;
   res.json(userWithoutPassword);
 });
 
@@ -132,7 +139,7 @@ router.put('/me/balance', authenticate, async (req, res) => {
       `UPDATE users SET ${setParts.join(', ')} WHERE id=$${idx} RETURNING *`,
       vals
     );
-    const u = mapUser(result.rows[0]);
+    const u = req.user.role === 'admin' ? mapUser(result.rows[0]) : mapUserPublic(result.rows[0]);
     delete u.password;
     res.json({ message: 'Balance updated', user: u });
   } catch (err) {

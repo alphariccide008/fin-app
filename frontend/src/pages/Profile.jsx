@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import {
   Mail, Phone, CreditCard, Calendar,
-  Building2, Shield, Hash, ZoomIn, X, CheckCircle2,
+  Building2, Hash,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { UserPageLayout } from '../components/UserPageLayout';
@@ -26,60 +25,6 @@ const InfoRow = ({ icon: Icon, label, value }) => (
   </div>
 );
 
-const IdImageCard = ({ label, src }) => {
-  const [zoomed, setZoomed] = useState(false);
-
-  if (!src) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <p style={{ fontSize: 12, fontWeight: 700, color: MUTED, textTransform: 'uppercase', letterSpacing: '.5px', margin: '0 0 10px' }}>{label}</p>
-        <div style={{ background: '#f8fafc', border: `2px dashed ${BORDER}`, borderRadius: 10, flex: 1, minHeight: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 8 }}>
-          <CreditCard size={28} style={{ color: '#cbd5e1' }} />
-          <p style={{ fontSize: 12, color: '#94a3b8', margin: 0 }}>Not uploaded</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <p style={{ fontSize: 12, fontWeight: 700, color: MUTED, textTransform: 'uppercase', letterSpacing: '.5px', margin: '0 0 10px' }}>{label}</p>
-      <div
-        style={{ position: 'relative', borderRadius: 10, overflow: 'hidden', border: `2px solid ${LEMON}`, cursor: 'zoom-in', flex: 1 }}
-        onClick={() => setZoomed(true)}
-      >
-        <img src={src} alt={label} style={{ width: '100%', height: 190, objectFit: 'cover', display: 'block' }} />
-        <div
-          style={{ position: 'absolute', inset: 0, background: 'rgba(0,61,43,.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transition: 'opacity .2s', flexDirection: 'column', gap: 6 }}
-          onMouseEnter={e => e.currentTarget.style.opacity = 1}
-          onMouseLeave={e => e.currentTarget.style.opacity = 0}
-        >
-          <ZoomIn size={28} style={{ color: '#fff' }} />
-          <span style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>Click to enlarge</span>
-        </div>
-      </div>
-
-      {zoomed && (
-        <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.9)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
-          onClick={() => setZoomed(false)}
-        >
-          <button
-            style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,.15)', border: 'none', borderRadius: '50%', width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
-            onClick={() => setZoomed(false)}
-          >
-            <X size={18} />
-          </button>
-          <img
-            src={src} alt={label}
-            style={{ maxWidth: '92vw', maxHeight: '88vh', borderRadius: 10, objectFit: 'contain', boxShadow: '0 30px 80px rgba(0,0,0,.6)' }}
-            onClick={e => e.stopPropagation()}
-          />
-        </div>
-      )}
-    </div>
-  );
-};
 
 export default function Profile() {
   const { user } = useAuth();
@@ -93,39 +38,6 @@ export default function Profile() {
           <div style={{ marginBottom: 20 }}>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: GREEN, margin: '0 0 3px' }}>My Profile</h1>
             <p style={{ fontSize: 13, color: MUTED, margin: 0 }}>Your personal information and uploaded identification documents.</p>
-          </div>
-
-          {/* ── ID Card — MAIN SECTION ── */}
-          <div style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 10, marginBottom: 18, overflow: 'hidden' }}>
-            {/* Header */}
-            <div style={{ background: `linear-gradient(135deg, ${GREEN}, ${GREEN_MID})`, padding: '16px 22px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(200,225,90,.2)', border: '1px solid rgba(200,225,90,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CreditCard size={17} style={{ color: LEMON }} />
-              </div>
-              <div>
-                <p style={{ fontSize: 15, fontWeight: 800, color: '#fff', margin: 0 }}>Government-Issued ID Card</p>
-                <p style={{ fontSize: 12, color: 'rgba(255,255,255,.65)', margin: '1px 0 0' }}>Your uploaded identification documents</p>
-              </div>
-              {(user?.idFront && user?.idBack) && (
-                <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, color: LEMON, background: 'rgba(200,225,90,.15)', border: '1px solid rgba(200,225,90,.3)', padding: '3px 10px', borderRadius: 20 }}>
-                  <CheckCircle2 size={12} /> Verified
-                </span>
-              )}
-            </div>
-
-            {/* ID images */}
-            <div style={{ padding: '20px 22px' }}>
-              <div className="id-card-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                <IdImageCard label="Front of ID" src={user?.idFront} />
-                <IdImageCard label="Back of ID"  src={user?.idBack} />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 14, padding: '10px 14px', background: LEMON_LT, borderRadius: 8, border: `1px solid rgba(200,225,90,.3)` }}>
-                <Shield size={13} style={{ color: LEMON_DK, flexShrink: 0 }} />
-                <p style={{ fontSize: 12, color: '#475569', margin: 0 }}>
-                  Your ID documents are encrypted and stored securely. Only you and authorized bank staff can view them.
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* ── Personal & Account Info ── */}
@@ -177,7 +89,6 @@ export default function Profile() {
       <style>{`
         @media (max-width: 768px) {
           .profile-info-grid { grid-template-columns: 1fr !important; }
-          .id-card-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </UserPageLayout>
