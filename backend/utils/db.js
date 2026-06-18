@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const DB_URL = process.env.DATABASE_URL ||
-  'postgresql://financial_app_l8jw_user:pYka3ELePazQFROEa6f1F4sCw2CeKOnM@dpg-d6d2pafpm1nc739i9a5g-a.oregon-postgres.render.com/financial_app_l8jw';
+  'postgresql://mttbank_user:hUWkLKLzCUx0HTqoFIit5sMtUZqDTnst@dpg-d8pnpu8js32c738tgd9g-a.oregon-postgres.render.com/mttbank';
 
 const pool = new Pool({
   connectionString: DB_URL,
