@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const DB_URL = process.env.DATABASE_URL ||
-  'postgresql://mttbank_user:hUWkLKLzCUx0HTqoFIit5sMtUZqDTnst@dpg-d8pnpu8js32c738tgd9g-a.oregon-postgres.render.com/mttbank';
+  'postgresql://onlinebanking_wjru_user:UUiOYiq6ZuMsBESc9DVGNOJh00inCBPQ@dpg-da9bh1e7bikc738rlmh0-a.oregon-postgres.render.com/onlinebanking_wjru';
 
 const pool = new Pool({
   connectionString: DB_URL,
