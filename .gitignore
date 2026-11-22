@@ -43,3 +43,8 @@ landing.html
 tbb/
 
 .vercel
+
+# local DB connection string
+database
+.be.log
+.fe.log

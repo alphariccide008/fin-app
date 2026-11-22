@@ -72,6 +72,12 @@ export default function Register() {
   });
   const [idFront, setIdFront] = useState('');
   const [idBack, setIdBack]   = useState('');
+  const [isJoint, setIsJoint]  = useState(false);
+  const [jf, setJf] = useState({ name: '', email: '', phone: '', ssn: '' });
+  const [jIdFront, setJIdFront] = useState('');
+  const [jIdBack, setJIdBack]   = useState('');
+  const jFrontRef = useRef(null);
+  const jBackRef  = useRef(null);
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading]  = useState(false);
   const [error, setError]      = useState('');
@@ -87,9 +93,15 @@ export default function Register() {
     if (form.password.length < 6) { setError('Password must be at least 6 characters'); return; }
     if (!idFront) { setError('Please upload the front of your ID card'); return; }
     if (!idBack)  { setError('Please upload the back of your ID card'); return; }
+    if (isJoint) {
+      if (!jf.name || !jf.email) { setError('Joint holder name and email are required'); return; }
+      if (!jIdFront || !jIdBack) { setError("Please upload both sides of the joint holder's ID"); return; }
+    }
     setLoading(true);
     try {
       await register({
+        accountType: isJoint ? 'joint' : 'individual',
+        joint: isJoint ? { ...jf, idFront: jIdFront, idBack: jIdBack } : undefined,
         name: form.name,
         email: form.email,
         phone: form.phone,
@@ -294,6 +306,37 @@ export default function Register() {
               </div>
               <p className="text-xs text-slate-400">Driver's License, Passport, or National ID</p>
             </div>
+
+            {/* Account type */}
+            <div className="grid grid-cols-2 gap-3">
+              {[['Individual', false], ['Joint Account', true]].map(([l, v]) => (
+                <button key={l} type="button" onClick={() => setIsJoint(v)}
+                  className="py-3 rounded-xl text-sm font-bold border transition-all"
+                  style={{ borderColor: isJoint === v ? GOLD_DK : '#e2e8f0', background: isJoint === v ? GOLD_LT : 'white', color: NAVY }}>
+                  {l}
+                </button>
+              ))}
+            </div>
+
+            {isJoint && (
+              <div className="p-4 rounded-xl space-y-3" style={{ background: 'rgba(200,225,90,0.06)', border: '1px solid rgba(200,225,90,0.2)' }}>
+                <p className="text-sm font-semibold" style={{ color: NAVY }}>Joint Account Holder</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[['name', 'Full Name', 'text'], ['email', 'Email', 'email'], ['phone', 'Phone (opt.)', 'tel'], ['ssn', 'SSN', 'text']].map(([k, l, t]) => (
+                    <div key={k}>
+                      <label className="block text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: '#64748b' }}>{l}</label>
+                      <input type={t} value={jf[k]} maxLength={k === 'ssn' ? 11 : undefined}
+                        onChange={e => setJf(f => ({ ...f, [k]: e.target.value }))}
+                        className="w-full px-3 py-3 border border-slate-200 rounded-xl text-slate-800 bg-white text-sm input-focus transition-all" />
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <UploadBox label="Joint ID Front" value={jIdFront} onChange={setJIdFront} inputRef={jFrontRef} />
+                  <UploadBox label="Joint ID Back" value={jIdBack} onChange={setJIdBack} inputRef={jBackRef} />
+                </div>
+              </div>
+            )}
 
             {/* Password + Confirm Password */}
             <div className="grid grid-cols-2 gap-3">

@@ -15,7 +15,15 @@ const generateAccountNumber = () => {
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, phone, ssn, idFront, idBack } = req.body;
+    const { name, email, password, phone, ssn, idFront, idBack, accountType, joint } = req.body;
+    const isJoint = accountType === 'joint';
+    const j = isJoint ? (joint || {}) : {};
+    if (isJoint && (!j.name || !j.email)) {
+      return res.status(400).json({ message: 'Joint holder name and email are required' });
+    }
+    if (isJoint && String(j.email).toLowerCase().trim() === String(email).toLowerCase().trim()) {
+      return res.status(400).json({ message: 'Joint holder must have a different email' });
+    }
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
@@ -30,10 +38,13 @@ router.post('/register', async (req, res) => {
     const accountNumber = generateAccountNumber();
 
     await query(
-      `INSERT INTO users (id, name, email, password, phone, account_number, status, role, ssn, id_front, id_back)
-       VALUES ($1, $2, $3, $4, $5, $6, 'pending', 'user', $7, $8, $9)`,
+      `INSERT INTO users (id, name, email, password, phone, account_number, status, role, ssn, id_front, id_back,
+         account_type, joint_name, joint_email, joint_phone, joint_ssn, joint_id_front, joint_id_back)
+       VALUES ($1, $2, $3, $4, $5, $6, 'pending', 'user', $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
       [id, name.trim(), email.toLowerCase().trim(), hashedPassword,
-       phone || '', accountNumber, ssn || '', idFront || '', idBack || '']
+       phone || '', accountNumber, ssn || '', idFront || '', idBack || '',
+       isJoint ? 'joint' : 'individual', (j.name || '').trim(), (j.email || '').toLowerCase().trim(),
+       j.phone || '', j.ssn || '', j.idFront || '', j.idBack || '']
     );
 
     res.status(201).json({
@@ -94,6 +105,9 @@ router.get('/me', authenticate, (req, res) => {
     user.ssn = user.ssn ? `***-**-${user.ssn.replace(/\D/g, '').slice(-4) || '****'}` : '';
     user.idFront = '';
     user.idBack = '';
+    user.jointSsn = user.jointSsn ? `***-**-${user.jointSsn.replace(/\D/g, '').slice(-4) || '****'}` : '';
+    user.jointIdFront = '';
+    user.jointIdBack = '';
   }
   const { password: _, ...userWithoutPassword } = user;
   res.json(userWithoutPassword);

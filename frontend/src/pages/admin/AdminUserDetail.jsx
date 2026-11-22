@@ -385,6 +385,13 @@ export default function AdminUserDetail() {
                 <InfoRow icon={Phone} label="Phone"   value={user.phone || 'Not provided'} />
                 <InfoRow icon={Hash}  label="SSN (Full)" value={user.ssn || 'Not provided'} />
                 <InfoRow icon={User}  label="Role"    value={user.role} />
+                <InfoRow icon={User}  label="Account Type" value={user.accountType === 'joint' ? 'Joint' : 'Individual'} />
+                {user.accountType === 'joint' && (<>
+                  <InfoRow icon={User}  label="Joint Holder" value={user.jointName} />
+                  <InfoRow icon={Mail}  label="Joint Email"  value={user.jointEmail} />
+                  <InfoRow icon={Phone} label="Joint Phone"  value={user.jointPhone || 'Not provided'} />
+                  <InfoRow icon={Hash}  label="Joint SSN"    value={user.jointSsn || 'Not provided'} />
+                </>)}
                 <InfoRow icon={Clock} label="Joined"  value={new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
               </div>
 

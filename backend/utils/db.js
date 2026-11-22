@@ -36,6 +36,13 @@ const initSchema = async () => {
       ssn TEXT DEFAULT '',
       id_front TEXT DEFAULT '',
       id_back TEXT DEFAULT '',
+      account_type TEXT DEFAULT 'individual',
+      joint_name TEXT DEFAULT '',
+      joint_email TEXT DEFAULT '',
+      joint_phone TEXT DEFAULT '',
+      joint_ssn TEXT DEFAULT '',
+      joint_id_front TEXT DEFAULT '',
+      joint_id_back TEXT DEFAULT '',
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
@@ -77,6 +84,13 @@ const initSchema = async () => {
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS ssn TEXT DEFAULT ''`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS id_front TEXT DEFAULT ''`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS id_back TEXT DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS account_type TEXT DEFAULT 'individual'`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS joint_name TEXT DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS joint_email TEXT DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS joint_phone TEXT DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS joint_ssn TEXT DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS joint_id_front TEXT DEFAULT ''`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS joint_id_back TEXT DEFAULT ''`,
     // TRUE default for existing rows so they don't generate false unread notifications
     `ALTER TABLE messages ADD COLUMN IF NOT EXISTS read_by_user BOOLEAN DEFAULT TRUE`,
     `ALTER TABLE transactions ADD COLUMN IF NOT EXISTS bank_to TEXT DEFAULT ''`,
@@ -104,6 +118,13 @@ const mapUser = (row) => ({
   ssn: row.ssn || '',
   idFront: row.id_front || '',
   idBack: row.id_back || '',
+  accountType: row.account_type || 'individual',
+  jointName: row.joint_name || '',
+  jointEmail: row.joint_email || '',
+  jointPhone: row.joint_phone || '',
+  jointSsn: row.joint_ssn || '',
+  jointIdFront: row.joint_id_front || '',
+  jointIdBack: row.joint_id_back || '',
   createdAt: row.created_at,
 });
 
@@ -120,6 +141,9 @@ const mapUserPublic = (row) => {
   u.ssn = maskSSN(u.ssn);
   u.idFront = '';
   u.idBack = '';
+  u.jointSsn = maskSSN(u.jointSsn);
+  u.jointIdFront = '';
+  u.jointIdBack = '';
   return u;
 };
 
