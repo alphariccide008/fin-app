@@ -85,7 +85,7 @@ export const Sidebar = () => {
           </div>
           <div className="min-w-0">
             <p className="text-white text-sm font-semibold truncate">{user?.name}</p>
-            <p className="text-slate-400 text-xs truncate">{user?.accountNumber}</p>
+            <p className="text-slate-400 text-xs truncate">{user?.accountType === 'joint' ? 'Joint · ' : ''}{user?.accountNumber}</p>
           </div>
         </div>
       </div>

@@ -199,7 +199,8 @@ export default function AdminUsers() {
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-slate-800 text-sm">{user.name}</p>
+                      <p className="font-semibold text-slate-800 text-sm">{user.name}{user.accountType === 'joint' && user.jointName ? ` & ${user.jointName}` : ''}</p>
+                      {user.accountType === 'joint' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">JOINT</span>}
                       <StatusBadge status={user.status} />
                     </div>
                     <p className="text-xs text-slate-400 mt-0.5">{user.email} · {user.accountNumber}</p>

@@ -343,9 +343,15 @@ export default function AdminUserDetail() {
                 >
                   {initials}
                 </div>
-                <h2 className="text-xl font-bold" style={{ color: NAVY }}>{user.name}</h2>
+                <h2 className="text-xl font-bold text-center" style={{ color: NAVY }}>{user.name}</h2>
+                {user.accountType === 'joint' && user.jointName && (
+                  <p className="text-sm font-semibold text-center" style={{ color: NAVY }}>& {user.jointName}</p>
+                )}
                 <p className="text-sm text-slate-400 mt-1">{user.accountNumber}</p>
-                <div className="mt-2"><StatusBadge status={user.status} /></div>
+                <div className="mt-2 flex items-center gap-2">
+                  <StatusBadge status={user.status} />
+                  {user.accountType === 'joint' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">JOINT ACCOUNT</span>}
+                </div>
               </div>
 
               {/* Status actions */}

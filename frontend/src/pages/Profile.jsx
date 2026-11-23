@@ -50,7 +50,7 @@ export default function Profile() {
                   {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U'}
                 </div>
                 <div>
-                  <p style={{ fontSize: 15, fontWeight: 800, color: '#fff', margin: '0 0 2px' }}>{user?.name}</p>
+                  <p style={{ fontSize: 15, fontWeight: 800, color: '#fff', margin: '0 0 2px' }}>{user?.name}{user?.accountType === 'joint' && user?.jointName ? ` & ${user.jointName}` : ''}</p>
                   <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 20, background: user?.status === 'active' ? 'rgba(200,225,90,.2)' : 'rgba(255,150,0,.2)', color: user?.status === 'active' ? LEMON : '#fbbf24', border: `1px solid ${user?.status === 'active' ? 'rgba(200,225,90,.35)' : 'rgba(255,150,0,.35)'}` }}>
                     {(user?.status || 'active').toUpperCase()}
                   </span>

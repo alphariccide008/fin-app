@@ -147,7 +147,8 @@ export default function Dashboard() {
     }
   };
 
-  const fullName  = user?.name?.toUpperCase() ?? '';
+  const isJointAcct = user?.accountType === 'joint';
+  const fullName  = ((isJointAcct && user?.jointName) ? `${user.name} & ${user.jointName}` : (user?.name ?? '')).toUpperCase();
   const lastName  = user?.name?.split(' ').slice(-1)[0]?.toUpperCase() ?? '';
   const recent    = transactions.slice(0, 10);
   const pending   = transactions.filter(t => t.status === 'pending' && t.type === 'debit');
@@ -163,10 +164,11 @@ export default function Dashboard() {
     <div style={{ padding: '16px 20px' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
         {[
-          { label: 'Account Holder', value: user?.name },
+          { label: isJointAcct ? 'Primary Holder' : 'Account Holder', value: user?.name },
+          ...(isJointAcct ? [{ label: 'Joint Holder', value: user?.jointName || 'N/A' }] : []),
           { label: 'Account Number', value: user?.accountNumber },
           { label: 'Email',          value: user?.email },
-          { label: 'Account Type',   value: 'M&T Checking' },
+          { label: 'Account Type',   value: isJointAcct ? 'M&T Checking (Joint)' : 'M&T Checking' },
           { label: 'Routing Number', value: '022000046' },
           { label: 'Member Since',   value: user?.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A' },
         ].map(({ label, value }) => (
@@ -186,6 +188,7 @@ export default function Dashboard() {
         <div>
           <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 }}>
             M&amp;T Checking — {user?.accountNumber}
+            {isJointAcct && <span style={{ marginLeft: 8, fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 20, background: 'rgba(200,225,90,.2)', color: LEMON, border: '1px solid rgba(200,225,90,.35)', verticalAlign: 'middle' }}>JOINT ACCOUNT</span>}
           </p>
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,.7)', margin: '2px 0 0' }}>
             Dear, <strong style={{ color: LEMON }}>{fullName}</strong>
